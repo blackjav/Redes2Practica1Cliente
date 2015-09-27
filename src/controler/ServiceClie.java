@@ -5,12 +5,17 @@
  */
 package controler;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -26,10 +31,9 @@ import view.VentanaCliente;
 public class ServiceClie extends Thread{
     
     private PrintWriter salidaText;
-    private BufferedReader entradaText;
     private Socket socket;
-    private FileOutputStream salidaFile;
-    private FileInputStream entradaFile;
+    private ObjectOutputStream out;
+    private FileInputStream file;//Aqui va la ruta
     private static final int PUERTO = 5000;
     
     public ServiceClie(String ip)
@@ -37,12 +41,12 @@ public class ServiceClie extends Thread{
         super("Cliente");
             try
             {
-                this.socket = new Socket(ip,PUERTO);
+                this.socket= new Socket(ip,PUERTO);
+                out = new  ObjectOutputStream(socket.getOutputStream());
                 this.salidaText = new PrintWriter(socket.getOutputStream(),true);
-                this.entradaText = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 VentanaCliente.jbConnect.setText("Cerrar Sesión");
 //                System.out.println("Todo funcionando !!!!");
-            }catch(IOException e){
+            }catch(Exception e){
                     JOptionPane.showMessageDialog(null, "No se ha podido establecer conexion \nVerifique la ip", "Error de conexion", JOptionPane.ERROR_MESSAGE);
             }
 //            run();
@@ -52,35 +56,34 @@ public class ServiceClie extends Thread{
     @Override
     public void run()
     {
-        String mensaje="";
+        String tamaño="";
+        String nombre="";
        try {
             while(true)
             {
-                mensaje= this.entradaText.readLine();
-                System.out.println("Entro "+mensaje);
-                VentanaCliente.txtAreaText.setText(VentanaCliente.txtAreaText.getText() + "\n" +mensaje);
+                 
+ 
             }
-        } catch (IOException ex) {
+        } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "No se ha podido establecer conexion ciere el programa", "Error de conexion", JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(ServiceClie.class.getName()).log(Level.SEVERE, null, ex);
            }
         
     }
-    public void enviarMsj(String mensaje)
-    {
-        try {
-            this.salidaText = new PrintWriter(socket.getOutputStream(),true);
-            System.out.println("Se va a enviar "+ mensaje);
-            salidaText.println(mensaje);
-        } catch (IOException ex) {
-            Logger.getLogger(ServiceClie.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void sendFile(File archivo, int tam) throws FileNotFoundException, IOException
+    {   
+        this.salidaText = new PrintWriter(socket.getOutputStream(),true);
+        this.file = new FileInputStream(archivo);
+        byte [] buffer = new byte[tam];
+        int len = file.read(buffer);
+        salidaText.println(tam);
+        out.write(buffer, 0, len);
     }
+   
     public void desconectar()
     {
         try {
             this.socket.close();
-            this.entradaText.close();
             this.salidaText.close();
             VentanaCliente.jbConnect.setText("Conectar");
         } catch (IOException ex) {

@@ -7,6 +7,8 @@ package view;
 
 import controler.ServiceClie;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -21,12 +23,13 @@ public class VentanaCliente extends javax.swing.JFrame {
      */
     private ServiceClie service = null;
     private boolean flag = true;
+    private JFileChooser selector ;
+
     
     public VentanaCliente() {
         initComponents();
         jpUser.setEnabled(false);
         jbSend.setEnabled(false);
-        txtMensaje.setEnabled(false);
         this.setTitle("Aplicacion Cliente");
         this.setResizable(true);
         this.setLocationRelativeTo(this);
@@ -49,8 +52,8 @@ public class VentanaCliente extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaText = new javax.swing.JTextArea();
+        jProgressBar1 = new javax.swing.JProgressBar();
         jpUser = new javax.swing.JPanel();
-        txtMensaje = new javax.swing.JTextField();
         jbSend = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -78,11 +81,17 @@ public class VentanaCliente extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+            .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23))
         );
 
         jpUser.setBorder(javax.swing.BorderFactory.createTitledBorder("Mensaje"));
@@ -98,18 +107,15 @@ public class VentanaCliente extends javax.swing.JFrame {
         jpUser.setLayout(jpUserLayout);
         jpUserLayout.setHorizontalGroup(
             jpUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtMensaje)
             .addGroup(jpUserLayout.createSequentialGroup()
                 .addComponent(jbSend)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 319, Short.MAX_VALUE))
         );
         jpUserLayout.setVerticalGroup(
             jpUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpUserLayout.createSequentialGroup()
-                .addComponent(txtMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbSend)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 14, Short.MAX_VALUE))
         );
 
         jLabel1.setText("Conectar a : ");
@@ -125,16 +131,17 @@ public class VentanaCliente extends javax.swing.JFrame {
                         .addComponent(jpUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtIp, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 111, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtIp, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbConnect)
                         .addGap(5, 5, 5))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,11 +151,11 @@ public class VentanaCliente extends javax.swing.JFrame {
                         .addComponent(txtIp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1))
                     .addComponent(jbConnect))
-                .addGap(17, 17, 17)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jpUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jpUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Archivo");
@@ -181,8 +188,8 @@ public class VentanaCliente extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -205,7 +212,6 @@ public class VentanaCliente extends javax.swing.JFrame {
 //                    jbConnect.setText("Cerrar Sesión");
                     jpUser.setEnabled(true);
                     jbSend.setEnabled(true);
-                    txtMensaje.setEnabled(true);
                     this.flag = false; 
                 }
                 catch(Exception e)
@@ -224,22 +230,40 @@ public class VentanaCliente extends javax.swing.JFrame {
 //            jbConnect.setText("Conectar");
             jpUser.setEnabled(false);
             jbSend.setEnabled(false);
-            txtMensaje.setEnabled(false);
             this.flag = true;
         }
     }//GEN-LAST:event_jbConnectActionPerformed
 
     private void jbSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendActionPerformed
+        selector = new JFileChooser();
+        selector.setMultiSelectionEnabled(true);
+        int respuesta = selector.showOpenDialog(this);
         
-        String mensaje = txtMensaje.getText();
-        try{
-            this.service.enviarMsj(mensaje);
-            txtMensaje.setText("");
-        }
-        catch(Exception e )
+        if (respuesta == JFileChooser.APPROVE_OPTION)
         {
-            JOptionPane.showMessageDialog(this, "No pudimos enviar tu mensaje :'( ", "Fail Send", JOptionPane.ERROR_MESSAGE);
+            try {
+                File archivos[]=selector.getSelectedFiles();
+                System.out.println("Cantidad de archivosS "+archivos.length);
+                int i=1;
+                for(File f:archivos)
+                {
+//                    f.getName();
+                    
+                    System.out.println("Nombre del archivo ["+i+"]"+f.getName());
+                    System.out.println("Tamaño del archivo["+i+"]:" +f.length());
+                    service.sendFile(f,(int)f.length());
+                    i++;
+		}
+                
+                
+                
+//                service.enviarFIles(archivoElegido,(int)archivoElegido.length() );
+            } catch (Exception ex) {
+                Logger.getLogger(VentanaCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
+        
     }//GEN-LAST:event_jbSendActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -296,12 +320,12 @@ public class VentanaCliente extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JButton jbConnect;
     private javax.swing.JButton jbSend;
     private javax.swing.JPanel jpUser;
     public static javax.swing.JTextArea txtAreaText;
     private javax.swing.JTextField txtIp;
-    private javax.swing.JTextField txtMensaje;
     // End of variables declaration//GEN-END:variables
 }
