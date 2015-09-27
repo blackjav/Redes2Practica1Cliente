@@ -21,8 +21,6 @@ public class VentanaCliente extends javax.swing.JFrame {
      */
     private ServiceClie service = null;
     private boolean flag = true;
-    private String archivos[];
-    String  nombreArchivo;
     
     public VentanaCliente() {
         initComponents();
@@ -246,23 +244,12 @@ public class VentanaCliente extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         JFileChooser fc = new JFileChooser();
-        fc.setMultiSelectionEnabled(true);
-       // System.out.println(fc.isMultiSelectionEnabled());
-        int respuesta = fc.showOpenDialog(null);
-        if (respuesta == fc.APPROVE_OPTION)
+        
+        int respuesta = fc.showOpenDialog(this);
+        if (respuesta == JFileChooser.APPROVE_OPTION)
         {
-            File archivoElegido[] = fc.getSelectedFiles();
-            int i=0;
-            for(File f:archivoElegido){
-                    //System.out.println(archivoElegido.length);
-                //    System.out.println(f.getAbsoluteFile());
-                    nombreArchivo=f.getAbsolutePath();
-                     System.out.println(nombreArchivo);
-                     service.enviarArchivo(nombreArchivo);
-                    //txtMensaje.setText();
-                    i++;
-            }
-            i=0;
+            File archivoElegido = fc.getSelectedFile();
+            System.out.println(archivoElegido.getName());
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
