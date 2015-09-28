@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -28,12 +30,13 @@ import view.VentanaCliente;
  *
  * @author javier
  */
-public class ServiceClie extends Thread{
+public class ServiceClie extends Thread implements Serializable{
     
     private PrintWriter salidaText;
     private Socket socket;
     private ObjectOutputStream out;
     private FileInputStream file;//Aqui va la ruta
+    private PrintStream envio;
     private static final int PUERTO = 5000;
     
     public ServiceClie(String ip)
@@ -44,6 +47,7 @@ public class ServiceClie extends Thread{
                 this.socket= new Socket(ip,PUERTO);
                 out = new  ObjectOutputStream(socket.getOutputStream());
                 this.salidaText = new PrintWriter(socket.getOutputStream(),true);
+                this.envio=new PrintStream(socket.getOutputStream());             
                 VentanaCliente.jbConnect.setText("Cerrar Sesión");
 //                System.out.println("Todo funcionando !!!!");
             }catch(Exception e){
@@ -59,11 +63,11 @@ public class ServiceClie extends Thread{
         String tamaño="";
         String nombre="";
        try {
-            while(true)
-            {
-                 
- 
-            }
+//            while(true)
+//            {
+//                 
+// 
+//            }
         } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "No se ha podido establecer conexion ciere el programa", "Error de conexion", JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(ServiceClie.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,12 +76,19 @@ public class ServiceClie extends Thread{
     }
     public void sendFile(File archivo, int tam) throws FileNotFoundException, IOException
     {   
-        this.salidaText = new PrintWriter(socket.getOutputStream(),true);
-        this.file = new FileInputStream(archivo);
-        byte [] buffer = new byte[tam];
-        int len = file.read(buffer);
-        salidaText.println(tam);
-        out.write(buffer, 0, len);
+        FileInputStream origen=new FileInputStream(archivo);
+        envio.flush();
+        byte[] buffer = new byte[1024];
+        int len;
+        salidaText.println("HOla");
+        int i =0;
+        while((len=origen.read(buffer))>0) {
+                this.envio=new PrintStream(socket.getOutputStream()); 
+                envio.write(buffer,0,len);
+                envio.close();
+                System.out.println("Entro "+i);
+                i++;
+        }
     }
    
     public void desconectar()
