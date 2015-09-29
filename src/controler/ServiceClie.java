@@ -77,18 +77,22 @@ public class ServiceClie extends Thread implements Serializable{
     public void sendFile(File archivo, int tam) throws FileNotFoundException, IOException
     {   
         FileInputStream origen=new FileInputStream(archivo);
+        this.salidaText = new PrintWriter(socket.getOutputStream(),true);
+
         envio.flush();
         byte[] buffer = new byte[1024];
         int len;
         salidaText.println("HOla");
+        salidaText.flush();
         int i =0;
         while((len=origen.read(buffer))>0) {
                 this.envio=new PrintStream(socket.getOutputStream()); 
                 envio.write(buffer,0,len);
-                envio.close();
-                System.out.println("Entro "+i);
-                i++;
+                
+                
         }
+        envio.close();
+//        salidaText.close();
     }
    
     public void desconectar()
