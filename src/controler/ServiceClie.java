@@ -46,7 +46,7 @@ public class ServiceClie extends Thread implements Serializable{
             {
                 this.socket= new Socket(ip,PUERTO);
                 out = new  ObjectOutputStream(socket.getOutputStream());
-                this.salidaText = new PrintWriter(socket.getOutputStream(),true);
+//                this.salidaText = new PrintWriter(socket.getOutputStream(),true);
                 this.envio=new PrintStream(socket.getOutputStream());             
                 VentanaCliente.jbConnect.setText("Cerrar Sesión");
 //                System.out.println("Todo funcionando !!!!");
@@ -74,16 +74,18 @@ public class ServiceClie extends Thread implements Serializable{
            }
         
     }
-    public void sendFile(File archivo, int tam) throws FileNotFoundException, IOException
+    public void sendFile(File archivo, int tam,String nombre,int cant) throws FileNotFoundException, IOException
     {   
         FileInputStream origen=new FileInputStream(archivo);
-        this.salidaText = new PrintWriter(socket.getOutputStream(),true);
+//        this.salidaText = new PrintWriter(socket.getOutputStream(),true);
 
-        envio.flush();
         byte[] buffer = new byte[1024];
         int len;
-        salidaText.println("HOla");
-        salidaText.flush();
+//        salidaText.println("HOla");
+        envio.println("xxx");
+        envio.println(tam);
+        envio.println(nombre);
+        envio.println(cant);
         int i =0;
         while((len=origen.read(buffer))>0) {
                 this.envio=new PrintStream(socket.getOutputStream()); 

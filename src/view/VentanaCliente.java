@@ -251,7 +251,7 @@ public class VentanaCliente extends javax.swing.JFrame {
                     
                     System.out.println("Nombre del archivo ["+i+"]"+f.getName());
                     System.out.println("Tamaño del archivo["+i+"]:" +f.length());
-                    service.sendFile(f,(int)f.length());
+                    service.sendFile(f,(int)f.length(),f.getName(),archivos.length);
                     i++;
 		}
                 
