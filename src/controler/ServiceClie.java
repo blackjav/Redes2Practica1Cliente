@@ -39,6 +39,8 @@ public class ServiceClie extends Thread implements Serializable{
     private ObjectOutputStream out;
     private FileInputStream file;//Aqui va la ruta
     private PrintStream envio;
+    private BufferedReader entradaText;
+    private InputStreamReader entradaSocket;
     private static final int PUERTO = 5000;
     
     public ServiceClie(String ip)
@@ -49,7 +51,10 @@ public class ServiceClie extends Thread implements Serializable{
                 this.socket= new Socket(ip,PUERTO);
                 out = new  ObjectOutputStream(socket.getOutputStream());
 //                this.salidaText = new PrintWriter(socket.getOutputStream(),true);
-                this.envio=new PrintStream(socket.getOutputStream());             
+                this.envio=new PrintStream(socket.getOutputStream()); 
+                this.entradaSocket = new InputStreamReader(socket.getInputStream());
+                this.entradaText = new BufferedReader(entradaSocket); 
+
                 VentanaCliente.jbConnect.setText("Cerrar Sesión");
 //                System.out.println("Todo funcionando !!!!");
             }catch(Exception e){
@@ -62,20 +67,24 @@ public class ServiceClie extends Thread implements Serializable{
     @Override
     public void run()
     {
-        String tamaño="";
-        String nombre="";
+        String mensaje="";
+        int i =1;
+//       Hilo de espera en mensaje 
        try {
-//            while(true)
-//            {
-//                 
-// 
-//            }
+            while(true)
+            {
+                mensaje = entradaText.readLine();
+                VentanaCliente.txtAreaText.setText(VentanaCliente.txtAreaText.getText() + "\n" +mensaje);
+                VentanaCliente.jProgressBar1.setValue(i);
+                i++;
+            }
         } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "No se ha podido establecer conexion ciere el programa", "Error de conexion", JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(ServiceClie.class.getName()).log(Level.SEVERE, null, ex);
            }
         
     }
+    
     public void sendFile(File archivo, int tam,String nombre,int cant) throws FileNotFoundException, IOException
     {   
         FileInputStream origen=new FileInputStream(archivo);
@@ -86,11 +95,11 @@ public class ServiceClie extends Thread implements Serializable{
         byte[] fileArray;
         String encoding;
         
-//        envio.println("xxx");
-//        envio.println(cant);
+//        Todos los datos hasta el archivo seran mandados en modo string gracias a apache axis
         envio.println(tam);
         envio.println(nombre);
         
+//        Construimos el array con la longitud del archivo en bytes
         fileArray = new byte[(int) archivo.length()];
         origen.read(fileArray);
         encoding = Base64.encode(fileArray);
@@ -101,6 +110,7 @@ public class ServiceClie extends Thread implements Serializable{
     }
     public void descriptor(long tamaño) throws IOException
     {
+//        Se ejecuta una vez para enviar solo el tamño del archivo y una cadena de basuara por el autofush
         this.envio=new PrintStream(socket.getOutputStream());
         envio.println("xxx");
         envio.println(tamaño);
