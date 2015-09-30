@@ -24,7 +24,9 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.axis.encoding.Base64;
 import view.VentanaCliente;
+
 
 /**
  *
@@ -78,23 +80,30 @@ public class ServiceClie extends Thread implements Serializable{
     {   
         FileInputStream origen=new FileInputStream(archivo);
 //        this.salidaText = new PrintWriter(socket.getOutputStream(),true);
-
-        byte[] buffer = new byte[1024];
+        this.envio=new PrintStream(socket.getOutputStream());
         int len;
-//        salidaText.println("HOla");
-        envio.println("xxx");
+        int i =0;
+        byte[] fileArray;
+        String encoding;
+        
+//        envio.println("xxx");
+//        envio.println(cant);
         envio.println(tam);
         envio.println(nombre);
-        envio.println(cant);
-        int i =0;
-        while((len=origen.read(buffer))>0) {
-                this.envio=new PrintStream(socket.getOutputStream()); 
-                envio.write(buffer,0,len);
-                
-                
-        }
-        envio.close();
-//        salidaText.close();
+        
+        fileArray = new byte[(int) archivo.length()];
+        origen.read(fileArray);
+        encoding = Base64.encode(fileArray);
+        envio.println(encoding);
+        System.out.println(encoding);
+        
+
+    }
+    public void descriptor(long tamaño) throws IOException
+    {
+        this.envio=new PrintStream(socket.getOutputStream());
+        envio.println("xxx");
+        envio.println(tamaño);
     }
    
     public void desconectar()

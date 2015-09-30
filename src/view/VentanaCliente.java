@@ -244,6 +244,7 @@ public class VentanaCliente extends javax.swing.JFrame {
             try {
                 File archivos[]=selector.getSelectedFiles();
                 System.out.println("Cantidad de archivosS "+archivos.length);
+                service.descriptor(archivos.length);
                 int i=1;
                 for(File f:archivos)
                 {
