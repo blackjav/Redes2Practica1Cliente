@@ -5,6 +5,7 @@
  */
 package controler;
 
+import java.awt.Color;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -58,7 +59,8 @@ public class ServiceClie extends Thread implements Serializable{
                 VentanaCliente.jbConnect.setText("Cerrar Sesión");
 //                System.out.println("Todo funcionando !!!!");
             }catch(Exception e){
-                    JOptionPane.showMessageDialog(null, "No se ha podido establecer conexion \nVerifique la ip", "Error de conexion", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "No se ha podido establecer conexion \nVerifique la ip", "Error de conexion", 
+                            JOptionPane.ERROR_MESSAGE);
             }
 //            run();
         
@@ -74,7 +76,13 @@ public class ServiceClie extends Thread implements Serializable{
             while(true)
             {
                 mensaje = entradaText.readLine();
-                VentanaCliente.txtAreaText.setText(VentanaCliente.txtAreaText.getText() + "\n" +mensaje);
+                if(mensaje.startsWith("*Se ha aceptado el archivo con el nombre de "))
+                    VentanaCliente.txtAreaText.setForeground(Color.GREEN);
+                else
+                    VentanaCliente.txtAreaText.setForeground(Color.RED);
+                
+                VentanaCliente.txtAreaText.append("\n" +mensaje);
+                VentanaCliente.txtAreaText.setCaretColor(Color.red);
                 VentanaCliente.jProgressBar1.setValue(i);
                 i++;
             }
